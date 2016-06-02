@@ -1,4 +1,4 @@
-package com.melodyxxx.puredaily;
+package com.melodyxxx.puredaily.ui.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -7,23 +7,37 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
+import com.melodyxxx.puredaily.R;
+import com.melodyxxx.puredaily.ui.fragment.LatestFragment;
+import com.melodyxxx.puredaily.utils.StatusBarUtils;
+
+import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.ViewInject;
+
+@ContentView(R.layout.activity_home)
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    @ViewInject(R.id.drawer_layout)
     private DrawerLayout mDrawerLayout;
 
-    @Override
-    public int loadContentView() {
-        return R.layout.activity_home;
-    }
+    @ViewInject(R.id.nav_view)
+    private NavigationView mNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarUtils.setStatusBarColorWithTransparentDrawerLayout(this, (DrawerLayout) findViewById(R.id.drawer_layout), getResources().getColor(R.color.colorPrimary));
-//        StatusBarUtil.setTransparentForDrawerLayout(this,(DrawerLayout) findViewById(R.id.drawer_layout));
-        initViews();
+        StatusBarUtils.setTopLayoutColor(this, (FrameLayout) findViewById(R.id.top_layout), getResources().getColor(R.color.colorPrimary));
         initDrawerLayout();
+        if (findViewById(R.id.fragment_container) != null) {
+            if (savedInstanceState != null) {
+                return;
+            }
+            LatestFragment latestFragment = new LatestFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, latestFragment).commit();
+        }
     }
 
     private void initDrawerLayout() {
@@ -31,17 +45,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    private void initViews() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mNavigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
@@ -85,4 +94,5 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return false;
     }
+
 }

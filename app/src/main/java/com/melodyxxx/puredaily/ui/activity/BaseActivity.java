@@ -1,28 +1,23 @@
-package com.melodyxxx.puredaily;
+package com.melodyxxx.puredaily.ui.activity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.WindowManager;
+
+import com.melodyxxx.puredaily.R;
+
+import org.xutils.x;
 
 public abstract class BaseActivity extends AppCompatActivity {
-
-    public abstract int loadContentView();
 
     protected Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(loadContentView());
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        }
-        //noinspection deprecation
-//        StatusBarUtils.setStatusBarColor(this, getResources().getColor(R.color.colorPrimary));
+        x.view().inject(this);
         initToolBar();
     }
 
@@ -40,6 +35,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setTitle(toolbarTitle);
+        }
+    }
+
+    protected void setToolbarTitle(int resId) {
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setTitle(getString(resId));
         }
     }
 
