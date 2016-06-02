@@ -3,6 +3,11 @@ package com.melodyxxx.puredaily.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+/**
+ * 支持ItemClick的RecyclerView适配器
+ * <p>
+ * Created by hanjie on 2016/5/31.
+ */
 public abstract class BaseAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
 
     protected BaseAdapter.OnItemClickListener mOnItemClickListener;

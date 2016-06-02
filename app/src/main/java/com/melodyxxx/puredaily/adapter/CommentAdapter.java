@@ -12,66 +12,74 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.melodyxxx.puredaily.R;
-import com.melodyxxx.puredaily.entity.Latest;
+import com.melodyxxx.puredaily.entity.Comment;
+import com.melodyxxx.puredaily.utils.CommonUtils;
 
 import java.util.ArrayList;
 
 /**
- * 最新消息适配器
+ * 评论适配器
  * <p>
- * Created by hanjie on 2016/5/31.
+ * Created by hanjie on 2016/6/2.
  */
-public class LatestAdapter extends BaseAdapter<LatestAdapter.MyViewHolder> {
+public class CommentAdapter extends BaseAdapter<CommentAdapter.MyViewHolder> {
 
-    private ArrayList<Latest> mStories;
+    private ArrayList<Comment> mComments;
     private Context mContext;
 
-    public LatestAdapter(Context context, ArrayList<Latest> stories) {
+    public CommentAdapter(Context context, ArrayList<Comment> comments) {
         this.mContext = context;
-        mStories = stories;
+        mComments = comments;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        Latest latest = mStories.get(position);
-        String imageUrl = latest.getImageUrl();
-        String title = latest.getTitle();
+        Comment comment = mComments.get(position);
         Glide.with(mContext)
-                .load(imageUrl)
+                .load(comment.getAvatar())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
-                .into(holder.image);
-        holder.title.setText(title);
+                .into(holder.avatar);
+        holder.author.setText(comment.getAuthor());
+        holder.time.setText(CommonUtils.formatCommentTime(Long.parseLong(comment.getTime() + "000")));
+        holder.content.setText(comment.getContent());
+        holder.likeCount.setText(comment.getLikes());
         // 开启动画
         setAnimation(holder.itemView);
     }
 
-    public void syncData(ArrayList<Latest> stories) {
-        this.mStories = stories;
+    public void syncData(ArrayList<Comment> comments) {
+        this.mComments = comments;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.item_latest, parent, false);
+        View view = inflater.inflate(R.layout.item_comment, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
     public int getItemCount() {
-        return mStories.size();
+        return mComments.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView image;
-        public TextView title;
+        ImageView avatar;
+        TextView author;
+        TextView time;
+        TextView content;
+        TextView likeCount;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.latest_image);
-            title = (TextView) itemView.findViewById(R.id.latest_title);
+            avatar = (ImageView) itemView.findViewById(R.id.iv_avatar);
+            author = (TextView) itemView.findViewById(R.id.tv_author);
+            time = (TextView) itemView.findViewById(R.id.tv_time);
+            content = (TextView) itemView.findViewById(R.id.tv_content);
+            likeCount = (TextView) itemView.findViewById(R.id.tv_like_count);
         }
 
     }

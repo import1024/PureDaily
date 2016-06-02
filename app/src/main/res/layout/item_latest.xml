@@ -12,7 +12,7 @@
         android:layout_height="65dp"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="25dp"
-        android:transitionName="hanjie"/>
+        android:transitionName="@string/transition_latest_with_latest_details"/>
 
 
     <TextView

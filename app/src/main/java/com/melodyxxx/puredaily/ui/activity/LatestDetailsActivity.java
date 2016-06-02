@@ -85,7 +85,7 @@ public class LatestDetailsActivity extends BaseActivity {
 
     @Event(value = R.id.fab, type = View.OnClickListener.class)
     private void onFabClick(View view) {
-        CommentActivity.startCommentActivity(this, mLatest);
+        CommentActivity.startCommentActivity(this, mLatest, mFab);
     }
 
     private void onFetchSuccess(LatestDetails latestDetails) {
@@ -108,20 +108,19 @@ public class LatestDetailsActivity extends BaseActivity {
     }
 
     private void initWebView() {
-        mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setBuiltInZoomControls(false);
         // 是否加载图片，后面无图模式会用到
 //        mWebView.getSettings().setBlockNetworkImage(true);
     }
 
-    public static void startStoryActivity(Activity activity, Latest latest, View view) {
+    public static void startLatestDetailsActivity(Activity activity, Latest latest, View view) {
         Intent intent = new Intent(activity, LatestDetailsActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("latest", latest);
         intent.putExtras(bundle);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity, view, "hanjie").toBundle());
+            activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity, view, activity.getString(R.string.transition_latest_with_latest_details)).toBundle());
         } else {
             activity.startActivity(intent);
         }

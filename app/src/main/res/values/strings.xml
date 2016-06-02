@@ -4,6 +4,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="transition_latest_with_latest_details">transition_one</string>
+    <string name="transition_latest_details_with_comments">transition_two</string>
+
     <string name="action_settings">Settings</string>
     <string name="action_share">分享</string>
     <string name="dialog_title_share">分享日报内容到</string>

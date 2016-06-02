@@ -118,7 +118,7 @@ public class LatestFragment extends BaseFragment {
         mAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, int position) {
-                LatestDetailsActivity.startStoryActivity(getActivity(), mStories.get(position), ((LatestAdapter.MyViewHolder) holder).image);
+                LatestDetailsActivity.startLatestDetailsActivity(getActivity(), mStories.get(position), ((LatestAdapter.MyViewHolder) holder).image);
             }
         });
     }

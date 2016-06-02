@@ -1,5 +1,6 @@
 package com.melodyxxx.puredaily.utils;
 
+import com.melodyxxx.puredaily.entity.Comment;
 import com.melodyxxx.puredaily.entity.Latest;
 import com.melodyxxx.puredaily.entity.LatestDetails;
 
@@ -16,6 +17,13 @@ import java.util.ArrayList;
  */
 public class ParserUtils {
 
+    /**
+     * 解析Latest最新消息
+     *
+     * @param result
+     * @return
+     * @throws JSONException
+     */
     public static ArrayList<Latest> parseLatestResult(String result) throws JSONException {
         ArrayList<Latest> stories = new ArrayList<Latest>();
         JSONObject resultJObj = new JSONObject(result);
@@ -41,6 +49,13 @@ public class ParserUtils {
         return stories;
     }
 
+    /**
+     * 解析Latest内容
+     *
+     * @param result
+     * @return
+     * @throws JSONException
+     */
     public static LatestDetails parseLatestDetailsResult(String result) throws JSONException {
         LatestDetails latestDetails = new LatestDetails();
         JSONObject resultJObj = new JSONObject(result);
@@ -52,6 +67,55 @@ public class ParserUtils {
         latestDetails.setId(resultJObj.getString("id"));
         latestDetails.setType(resultJObj.getString("type"));
         return latestDetails;
+    }
+
+    /**
+     * 解析长评论
+     *
+     * @param result
+     * @return
+     * @throws JSONException
+     */
+    public static ArrayList<Comment> parseLongComments(String result) throws JSONException {
+        return parseComments(result);
+    }
+
+    /**
+     * 解析短评论
+     *
+     * @param result
+     * @return
+     * @throws JSONException
+     */
+    public static ArrayList<Comment> parseShortComments(String result) throws JSONException {
+        return parseComments(result);
+    }
+
+
+    /**
+     * 解析评论
+     *
+     * @param result
+     * @return
+     * @throws JSONException
+     */
+    private static ArrayList<Comment> parseComments(String result) throws JSONException {
+        ArrayList<Comment> comments = new ArrayList<Comment>();
+        JSONObject resultJObj = new JSONObject(result);
+        JSONArray commentsJArray = resultJObj.getJSONArray("comments");
+        JSONObject commentJObj = null;
+        for (int pos = 0; pos < commentsJArray.length(); pos++) {
+            commentJObj = commentsJArray.getJSONObject(pos);
+            Comment comment = new Comment();
+            comment.setAuthor(commentJObj.getString("author"));
+            comment.setContent(commentJObj.getString("content"));
+            comment.setAvatar(commentJObj.getString("avatar"));
+            comment.setTime(commentJObj.getString("time"));
+            comment.setId(commentJObj.getString("id"));
+            comment.setLikes(commentJObj.getString("likes"));
+            comments.add(comment);
+        }
+        return comments;
     }
 
 }
