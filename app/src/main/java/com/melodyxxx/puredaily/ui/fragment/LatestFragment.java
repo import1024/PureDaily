@@ -3,27 +3,37 @@ package com.melodyxxx.puredaily.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.melodyxxx.puredaily.R;
 import com.melodyxxx.puredaily.adapter.BaseAdapter;
 import com.melodyxxx.puredaily.adapter.LatestAdapter;
 import com.melodyxxx.puredaily.entity.Latest;
 import com.melodyxxx.puredaily.task.FetchLatestTask;
+import com.melodyxxx.puredaily.ui.activity.HomeActivity;
 import com.melodyxxx.puredaily.ui.activity.LatestDetailsActivity;
+import com.melodyxxx.puredaily.utils.CommonUtils;
 import com.melodyxxx.puredaily.utils.DividerItemDecoration;
+import com.melodyxxx.puredaily.utils.SnackBarUtils;
 import com.wang.avi.AVLoadingIndicatorView;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 最新消息Fragment
@@ -59,6 +69,7 @@ public class LatestFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -67,7 +78,7 @@ public class LatestFragment extends BaseFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         initSwipe();
         startLoadingAnim();
-        fetchLatestData();
+        fetchLatestData(null);
         return view;
     }
 
@@ -75,28 +86,35 @@ public class LatestFragment extends BaseFragment {
         mSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchLatestData();
+                fetchLatestData(null);
             }
         });
         mSwipe.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
     }
 
-    private void fetchLatestData() {
-        FetchLatestTask.fetch(new FetchLatestTask.FetchLatestCallback() {
+    /**
+     * 获取消息
+     *
+     * @param date 指定获取的该日期的日报(date为null代表默认获取今日最新消息)
+     */
+    private void fetchLatestData(String date) {
+        FetchLatestTask.fetch(date, new FetchLatestTask.FetchLatestCallback() {
             @Override
-            public void onSuccess(ArrayList<Latest> latests) {
-                onFetchSuccess(latests);
+            public void onSuccess(ArrayList<Latest> latests, String resultDate) {
+                onFetchSuccess(latests, resultDate);
             }
 
             @Override
             public void onError(String errorMsg) {
+                SnackBarUtils.makeShort(mLoadingView, errorMsg).show();
                 onFetchFailed();
             }
         });
     }
 
-    private void onFetchSuccess(ArrayList<Latest> stories) {
-        this.mStories = stories;
+    private void onFetchSuccess(ArrayList<Latest> latests, String resultDate) {
+        ((HomeActivity) getActivity()).setToolbarTitle(CommonUtils.formatResultDate(resultDate));
+        this.mStories = latests;
         if (mAdapter == null) {
             initRecyclerView();
         } else {
@@ -131,13 +149,42 @@ public class LatestFragment extends BaseFragment {
     }
 
     private void startLoadingAnim() {
-        mDataArea.setVisibility(View.INVISIBLE);
         mLoadingView.setVisibility(View.VISIBLE);
     }
 
     private void stopLoadingAnim() {
-        mDataArea.setVisibility(View.VISIBLE);
         mLoadingView.setVisibility(View.GONE);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_history: {
+                displayCalendarChooser();
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void displayCalendarChooser() {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+                        fetchLatestData(CommonUtils.formatDateForHistory(year, monthOfYear, dayOfMonth + 1));
+                    }
+                },
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        Calendar min = Calendar.getInstance();
+        min.set(2013, 4, 19);
+        dpd.setMinDate(min);
+        Calendar max = Calendar.getInstance();
+        dpd.setMaxDate(max);
+        dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
+    }
 }

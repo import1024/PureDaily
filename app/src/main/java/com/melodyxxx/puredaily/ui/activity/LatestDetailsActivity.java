@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.melodyxxx.puredaily.R;
 import com.melodyxxx.puredaily.entity.Latest;
 import com.melodyxxx.puredaily.entity.LatestDetails;
 import com.melodyxxx.puredaily.task.FetchLatestDetailsTask;
+import com.melodyxxx.puredaily.utils.SnackBarUtils;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.xutils.view.annotation.ContentView;
@@ -69,6 +71,10 @@ public class LatestDetailsActivity extends BaseActivity {
         mLatest = (Latest) getIntent().getSerializableExtra("latest");
         initWebView();
         startLoadingAnim();
+        fetchLatestDetailsData();
+    }
+
+    private void fetchLatestDetailsData() {
         FetchLatestDetailsTask.fetch(mLatest.getId(), new FetchLatestDetailsTask.FetchLatestCallback() {
             @Override
             public void onSuccess(LatestDetails latestDetails) {
@@ -78,6 +84,7 @@ public class LatestDetailsActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMsg) {
+                SnackBarUtils.makeShort(mLoadingView, errorMsg).show();
                 stopLoadingAnim();
             }
         });
@@ -101,6 +108,10 @@ public class LatestDetailsActivity extends BaseActivity {
                     .dontTransform()
                     .dontAnimate()
                     .into(mImage);
+            if (TextUtils.isEmpty(mLatestDetails.getBody())) {
+                mWebView.loadUrl(mLatestDetails.getShareUrl());
+                return;
+            }
             String body = mLatestDetails.getBody().replace("<div class=\"headline\">", "").replace("<div class=\"img-place-holder\">", "");
             String htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" />" + "<br/>" + body;
             mWebView.loadDataWithBaseURL("file:///android_asset/", htmlData, "text/html", "UTF-8", null);

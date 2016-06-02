@@ -11,4 +11,6 @@
     <string name="action_share">分享</string>
     <string name="dialog_title_share">分享日报内容到</string>
     <string name="activity_title_comment">评论</string>
+    <string name="no_comment">暂无评论</string>
+    <string name="action_history">历史日报</string>
 </resources>

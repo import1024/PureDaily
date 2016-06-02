@@ -31,14 +31,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void setToolbarTitle(String toolbarTitle) {
+    public void setToolbarTitle(String toolbarTitle) {
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setTitle(toolbarTitle);
         }
     }
 
-    protected void setToolbarTitle(int resId) {
+    public void setToolbarTitle(int resId) {
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setTitle(getString(resId));

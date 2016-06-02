@@ -3,6 +3,7 @@ package com.melodyxxx.puredaily.utils;
 import android.util.Log;
 
 import org.xutils.common.Callback;
+import org.xutils.ex.HttpException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
@@ -41,26 +42,19 @@ public class Request {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 hasError = true;
-                Log.d("bingo", "onError:ex:" + ex.toString() + " isOnCallback:" + isOnCallback);
-                errorMsg = ex.toString();
+                errorMsg = "请检查网络环境设置";
             }
 
             @Override
             public void onCancelled(CancelledException cex) {
-                Log.d("bingo", "onCancelled:" + cex.toString());
             }
 
             @Override
             public void onFinished() {
                 if (this.result != null) {
-                    Log.d("bingo", "onFinished:获取数据成功");
                     requestCallback.onSuccess(this.result);
-                    if (this.hasError) {
-                        Log.d("bingo", "BUT,网络连接失败，这次从缓存获取的");
-                    }
                 } else {
                     if (this.hasError && errorMsg != null) {
-                        Log.d("bingo", "onFinished:获取数据失败");
                         requestCallback.onError(errorMsg);
                     }
                 }

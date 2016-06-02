@@ -29,6 +29,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StatusBarUtils.setTopLayoutColor(this, (FrameLayout) findViewById(R.id.top_layout), getResources().getColor(R.color.colorPrimary));
+        setToolbarTitle(null);
         initDrawerLayout();
         if (findViewById(R.id.fragment_container) != null) {
             if (savedInstanceState != null) {
@@ -60,15 +61,20 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home, menu);
+        getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings: {
+
+                break;
+            }
+            case R.id.action_history: {
+                return false;
+            }
         }
         return super.onOptionsItemSelected(item);
     }

@@ -18,5 +18,7 @@ public class API {
     public static final String PARAM_LONG_COMMENT = "/long-comments";
     // 短评论 - with BASE_COMMENT
     public static final String PARAM_SHORT_COMMENT = "/short-comments";
+    // 历史日报
+    public static final String BASE_HISTORY = "http://news.at.zhihu.com/api/4/news/before/";
 
 }
