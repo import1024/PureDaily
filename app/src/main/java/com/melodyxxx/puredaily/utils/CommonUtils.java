@@ -2,6 +2,7 @@ package com.melodyxxx.puredaily.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.TypedValue;
 
 import com.melodyxxx.puredaily.R;
@@ -80,6 +81,23 @@ public class CommonUtils {
                 break;
         }
         return style;
+    }
+
+    public static boolean nowIsDay(Context context) {
+        return isExistInterval(6, 0, 18, 0) ? true : false;
+    }
+
+
+    public static boolean isExistInterval(int startHour, int startMinuteOfHour, int endHour, int endMinuteOfHour) {
+        boolean isExist = false;
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR_OF_DAY);// 获取小时,自动24小时制
+        int minute = cal.get(Calendar.MINUTE);// 获取分钟
+        int minuteOfDay = hour * 60 + minute;// 从0:00分开是到目前为止的分钟数
+        int start = startHour * 60 + startMinuteOfHour;
+        int end = endHour * 60 + endMinuteOfHour;
+        isExist = minuteOfDay >= start && minuteOfDay < end;
+        return isExist;
     }
 
     public static String formatTime(long timeMillis, String pattern) {

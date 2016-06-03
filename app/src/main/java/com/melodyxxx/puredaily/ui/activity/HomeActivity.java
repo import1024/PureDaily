@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.melodyxxx.puredaily.R;
 import com.melodyxxx.puredaily.constant.PrefConstants;
@@ -35,6 +36,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @ViewInject(R.id.nav_view)
     private NavigationView mNavigationView;
+
+    private ImageView mNavHeaderImgView;
 
     private SwitchCompat mPicModeSwitch;
 
@@ -66,6 +69,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initNavView() {
+        // 初始化抽屉无图模式SwitchCompat
         Menu menu = mNavigationView.getMenu();
         MenuItem picModeMenuItem = menu.findItem(R.id.nav_pic_mode);
         View picModeActionView = MenuItemCompat.getActionView(picModeMenuItem);
@@ -79,6 +83,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 switchFragment(new LatestFragment());
             }
         });
+        // 初始化抽屉Header ImageView
+        mNavHeaderImgView = (ImageView) mNavigationView.getHeaderView(0).findViewById(R.id.iv_header);
+        if (CommonUtils.nowIsDay(this)) {
+            mNavHeaderImgView.setImageResource(R.drawable.img_nav_header_day);
+        } else {
+            mNavHeaderImgView.setImageResource(R.drawable.img_nav_header_night);
+        }
+
     }
 
     private void initDrawerLayout() {
