@@ -1,30 +1,32 @@
 package com.melodyxxx.puredaily.utils;
 
+import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
 public class SnackBarUtils {
 
-    private static final int SNACK_BAR_BACKGROUND_COLOR = 0xffe91e63;
+    private int mBackgroundColor = 0xffe91e63;
 
     private Snackbar mSnackBar;
 
-    private SnackBarUtils(Snackbar snackbar) {
+    private SnackBarUtils(Context context, Snackbar snackbar) {
         mSnackBar = snackbar;
+        mBackgroundColor = CommonUtils.getThemePrimaryColor(context);
     }
 
-    public static SnackBarUtils makeShort(View view, String text) {
+    public static SnackBarUtils makeShort(Context context, View view, String text) {
         Snackbar snackbar = Snackbar.make(view, text, Snackbar.LENGTH_SHORT);
-        return new SnackBarUtils(snackbar);
+        return new SnackBarUtils(context, snackbar);
     }
 
-    public static SnackBarUtils makeLong(View view, String text) {
+    public static SnackBarUtils makeLong(Context context, View view, String text) {
         Snackbar snackbar = Snackbar.make(view, text, Snackbar.LENGTH_LONG);
-        return new SnackBarUtils(snackbar);
+        return new SnackBarUtils(context, snackbar);
     }
 
     public void show() {
-        setSnackBarBackgroundColor(SNACK_BAR_BACKGROUND_COLOR);
+        setSnackBarBackgroundColor(mBackgroundColor);
         mSnackBar.show();
     }
 

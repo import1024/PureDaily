@@ -1,14 +1,28 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="Base.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:listDivider">@drawable/list_divider</item>
-        <item name="android:windowContentTransitions">true</item>
     </style>
+
+    <style name="AppTheme.Pink" parent="Base.AppTheme">
+        <item name="colorPrimary">@color/material_pink</item>
+        <item name="colorPrimaryDark">@color/material_pink</item>
+        <item name="colorAccent">@color/material_pink</item>
+    </style>
+
+    <style name="AppTheme.Blue" parent="Base.AppTheme">
+        <item name="colorPrimary">@color/material_blue</item>
+        <item name="colorPrimaryDark">@color/material_blue</item>
+        <item name="colorAccent">@color/material_blue</item>
+    </style>
+
+    <style name="AppTheme.Red" parent="Base.AppTheme">
+        <item name="colorPrimary">@color/material_red</item>
+        <item name="colorPrimaryDark">@color/material_red</item>
+        <item name="colorAccent">@color/material_red</item>
+    </style>
+
 
     <style name="ExpandedAppBar" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">18sp</item>

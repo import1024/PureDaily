@@ -1,5 +1,10 @@
 package com.melodyxxx.puredaily.utils;
 
+import android.content.Context;
+import android.util.TypedValue;
+
+import com.melodyxxx.puredaily.R;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -7,10 +12,16 @@ import java.util.Date;
 
 /**
  * CommonUtils
- * <p>
+ * <p/>
  * Created by hanjie on 2016/6/2.
  */
 public class CommonUtils {
+
+    public static int getThemePrimaryColor(Context context) {
+        final TypedValue value = new TypedValue();
+        context.getTheme().resolveAttribute(R.attr.colorPrimary, value, true);
+        return value.data;
+    }
 
     public static String formatTime(long timeMillis, String pattern) {
         return new SimpleDateFormat(pattern).format(new Date(timeMillis));

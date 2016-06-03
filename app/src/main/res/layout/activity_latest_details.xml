@@ -24,11 +24,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:contentScrim="@color/colorPrimary"
+                app:contentScrim="?attr/colorPrimary"
                 app:expandedTitleGravity="bottom|center_horizontal"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-                app:statusBarScrim="@color/colorPrimary"
+                app:statusBarScrim="?attr/colorPrimary"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
                 <ImageView
@@ -91,6 +91,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         app:indicator="TriangleSkewSpin"
-        app:indicator_color="@color/colorPrimary"/>
+        app:indicator_color="?attr/colorPrimary"/>
 
 </FrameLayout>

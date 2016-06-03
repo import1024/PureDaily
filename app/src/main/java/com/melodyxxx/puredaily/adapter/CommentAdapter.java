@@ -11,9 +11,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.cache.DiskCache;
 import com.melodyxxx.puredaily.R;
+import com.melodyxxx.puredaily.constant.PrefConstants;
 import com.melodyxxx.puredaily.entity.Comment;
 import com.melodyxxx.puredaily.utils.CommonUtils;
+import com.melodyxxx.puredaily.utils.PrefUtils;
 
 import java.util.ArrayList;
 
@@ -71,11 +74,15 @@ public class CommentAdapter extends BaseAdapter<CommentAdapter.MyViewHolder> {
             holder.commentType.setText("短评");
         } else {
             Comment comment = mComments.get(position);
-            Glide.with(mContext)
-                    .load(comment.getAvatar())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .crossFade()
-                    .into(holder.avatar);
+            if (!PrefUtils.getBoolean(mContext, PrefConstants.MODE_NO_PIC, false)) {
+                Glide.with(mContext)
+                        .load(comment.getAvatar())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .crossFade()
+                        .into(holder.avatar);
+            } else {
+                holder.avatar.setImageResource(R.drawable.ic_default_avatar);
+            }
             holder.author.setText(comment.getAuthor());
             holder.time.setText(CommonUtils.formatCommentTime(Long.parseLong(comment.getTime() + "000")));
             holder.content.setText(comment.getContent());

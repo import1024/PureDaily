@@ -12,7 +12,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.melodyxxx.puredaily.R;
+import com.melodyxxx.puredaily.constant.PrefConstants;
 import com.melodyxxx.puredaily.entity.Latest;
+import com.melodyxxx.puredaily.utils.PrefUtils;
 
 import java.util.ArrayList;
 
@@ -37,11 +39,16 @@ public class LatestAdapter extends BaseAdapter<LatestAdapter.MyViewHolder> {
         Latest latest = mStories.get(position);
         String imageUrl = latest.getImageUrl();
         String title = latest.getTitle();
-        Glide.with(mContext)
-                .load(imageUrl)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .crossFade()
-                .into(holder.image);
+        if (!PrefUtils.getBoolean(mContext, PrefConstants.MODE_NO_PIC, false)) {
+            Glide.with(mContext)
+                    .load(imageUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .crossFade()
+                    .into(holder.image);
+            holder.image.setVisibility(View.VISIBLE);
+        } else {
+            holder.image.setVisibility(View.GONE);
+        }
         holder.title.setText(title);
         // 开启动画
         setAnimation(holder.itemView);

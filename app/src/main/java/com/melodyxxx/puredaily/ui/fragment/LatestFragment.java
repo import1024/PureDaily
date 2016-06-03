@@ -3,16 +3,15 @@ package com.melodyxxx.puredaily.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.melodyxxx.puredaily.R;
 import com.melodyxxx.puredaily.adapter.BaseAdapter;
@@ -30,17 +29,15 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * 最新消息Fragment
  * Created by hanjie on 2016/5/31.
  */
 @ContentView(R.layout.fragment_latest)
-public class LatestFragment extends BaseFragment {
+public class LatestFragment extends BaseFragment implements HomeActivity.OnHistoryDailyClickListener {
 
     @ViewInject(R.id.recycler_view)
     private RecyclerView mRecyclerView;
@@ -50,9 +47,6 @@ public class LatestFragment extends BaseFragment {
 
     @ViewInject(R.id.swipe)
     private SwipeRefreshLayout mSwipe;
-
-    @ViewInject(R.id.data_area)
-    private FrameLayout mDataArea;
 
     private Context mContext;
 
@@ -82,6 +76,19 @@ public class LatestFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        ((HomeActivity) getActivity()).setHistoryDailyClickListener(this);
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ((HomeActivity) getActivity()).setHistoryDailyClickListener(null);
+    }
+
     private void initSwipe() {
         mSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -89,7 +96,7 @@ public class LatestFragment extends BaseFragment {
                 fetchLatestData(null);
             }
         });
-        mSwipe.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        mSwipe.setColorSchemeColors(CommonUtils.getThemePrimaryColor(mContext));
     }
 
     /**
@@ -106,14 +113,17 @@ public class LatestFragment extends BaseFragment {
 
             @Override
             public void onError(String errorMsg) {
-                SnackBarUtils.makeShort(mLoadingView, errorMsg).show();
+                SnackBarUtils.makeShort(mContext, mLoadingView, errorMsg).show();
                 onFetchFailed();
             }
         });
     }
 
     private void onFetchSuccess(ArrayList<Latest> latests, String resultDate) {
-        ((HomeActivity) getActivity()).setToolbarTitle(CommonUtils.formatResultDate(resultDate));
+        HomeActivity homeActivity = ((HomeActivity) getActivity());
+        if (homeActivity != null) {
+            homeActivity.setToolbarTitle(CommonUtils.formatResultDate(resultDate));
+        }
         this.mStories = latests;
         if (mAdapter == null) {
             initRecyclerView();
@@ -186,5 +196,11 @@ public class LatestFragment extends BaseFragment {
         Calendar max = Calendar.getInstance();
         dpd.setMaxDate(max);
         dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
+    }
+
+
+    @Override
+    public void onHistoryDailyClick() {
+        displayCalendarChooser();
     }
 }

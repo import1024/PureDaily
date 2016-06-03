@@ -20,9 +20,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.melodyxxx.puredaily.R;
+import com.melodyxxx.puredaily.constant.PrefConstants;
 import com.melodyxxx.puredaily.entity.Latest;
 import com.melodyxxx.puredaily.entity.LatestDetails;
 import com.melodyxxx.puredaily.task.FetchLatestDetailsTask;
+import com.melodyxxx.puredaily.utils.PrefUtils;
 import com.melodyxxx.puredaily.utils.SnackBarUtils;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -84,7 +86,7 @@ public class LatestDetailsActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMsg) {
-                SnackBarUtils.makeShort(mLoadingView, errorMsg).show();
+                SnackBarUtils.makeShort(LatestDetailsActivity.this, mLoadingView, errorMsg).show();
                 stopLoadingAnim();
             }
         });
@@ -102,12 +104,14 @@ public class LatestDetailsActivity extends BaseActivity {
             mCollapsingToolbarLayout.setTitle(mLatestDetails.getTitle());
             mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
             mCollapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
-            Glide.with(LatestDetailsActivity.this)
-                    .load(mLatestDetails.getImageUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .dontTransform()
-                    .dontAnimate()
-                    .into(mImage);
+            if (!PrefUtils.getBoolean(this, PrefConstants.MODE_NO_PIC, false)) {
+                Glide.with(LatestDetailsActivity.this)
+                        .load(mLatestDetails.getImageUrl())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .dontTransform()
+                        .dontAnimate()
+                        .into(mImage);
+            }
             if (TextUtils.isEmpty(mLatestDetails.getBody())) {
                 mWebView.loadUrl(mLatestDetails.getShareUrl());
                 return;
@@ -121,8 +125,8 @@ public class LatestDetailsActivity extends BaseActivity {
     private void initWebView() {
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setBuiltInZoomControls(false);
-        // 是否加载图片，后面无图模式会用到
-//        mWebView.getSettings().setBlockNetworkImage(true);
+        // 是否加载图片
+        mWebView.getSettings().setBlockNetworkImage(PrefUtils.getBoolean(this, PrefConstants.MODE_NO_PIC, false));
     }
 
     public static void startLatestDetailsActivity(Activity activity, Latest latest, View view) {
@@ -130,7 +134,8 @@ public class LatestDetailsActivity extends BaseActivity {
         Bundle bundle = new Bundle();
         bundle.putSerializable("latest", latest);
         intent.putExtras(bundle);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !PrefUtils.getBoolean(activity, PrefConstants.MODE_NO_PIC, false)) {
+            // Android 5.0+ && 没有开启无图模式 开启共享元素动画
             activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity, view, activity.getString(R.string.transition_latest_with_latest_details)).toBundle());
         } else {
             activity.startActivity(intent);

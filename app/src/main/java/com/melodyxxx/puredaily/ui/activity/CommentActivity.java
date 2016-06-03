@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -16,6 +15,7 @@ import com.melodyxxx.puredaily.adapter.CommentAdapter;
 import com.melodyxxx.puredaily.entity.Comment;
 import com.melodyxxx.puredaily.entity.Latest;
 import com.melodyxxx.puredaily.task.FetchCommentTask;
+import com.melodyxxx.puredaily.utils.CommonUtils;
 import com.melodyxxx.puredaily.utils.DividerItemDecoration;
 import com.melodyxxx.puredaily.utils.SnackBarUtils;
 import com.melodyxxx.puredaily.utils.StatusBarUtils;
@@ -58,7 +58,7 @@ public class CommentActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StatusBarUtils.setStatusBarColor(this, getResources().getColor(R.color.colorPrimary));
+        StatusBarUtils.setStatusBarColor(this, CommonUtils.getThemePrimaryColor(this));
         setToolbarTitle(R.string.activity_title_comment);
         Latest latest = (Latest) getIntent().getSerializableExtra("latest");
         startLoadingAnim();
@@ -80,7 +80,7 @@ public class CommentActivity extends BaseActivity {
                     public void onSuccess(ArrayList<Comment> comments) {
                         stopLoadingAnim();
                         mComments.addAll(comments);
-                        if (mComments.size() == 100){
+                        if (mComments.size() == 100) {
                             // 无长评&短评
                             mNoDataArea.setVisibility(View.VISIBLE);
                             return;
@@ -95,14 +95,14 @@ public class CommentActivity extends BaseActivity {
                     @Override
                     public void onError(String errorMsg) {
                         stopLoadingAnim();
-                        SnackBarUtils.makeShort(mLoadingView, errorMsg).show();
+                        SnackBarUtils.makeShort(CommentActivity.this, mLoadingView, errorMsg).show();
                     }
                 });
             }
 
             @Override
             public void onError(String errorMsg) {
-                SnackBarUtils.makeShort(mLoadingView, errorMsg).show();
+                SnackBarUtils.makeShort(CommentActivity.this, mLoadingView, errorMsg).show();
                 stopLoadingAnim();
             }
         });

@@ -51,7 +51,8 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
             android:paddingBottom="2dp"
-            android:src="@drawable/ic_like"/>
+            android:src="@drawable/ic_like"
+            android:tint="?attr/colorPrimary"/>
 
         <TextView
             android:id="@+id/tv_like_count"
@@ -61,6 +62,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/iv_like"
+            android:textColor="?attr/colorPrimary"
             android:textSize="12sp"/>
 
     </RelativeLayout>

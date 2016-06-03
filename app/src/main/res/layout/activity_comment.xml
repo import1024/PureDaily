@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:indicator="TriangleSkewSpin"
-            app:indicator_color="@color/colorPrimary"/>
+            app:indicator_color="?attr/colorPrimary"/>
 
         <LinearLayout
             android:id="@+id/no_data_area"
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="@string/no_comment"
-                android:textColor="@color/colorPrimary"
+                android:textColor="?attr/colorPrimary"
                 android:textSize="12sp"/>
 
         </LinearLayout>
