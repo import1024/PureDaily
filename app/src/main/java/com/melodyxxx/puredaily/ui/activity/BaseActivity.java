@@ -7,6 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.melodyxxx.puredaily.R;
+import com.melodyxxx.puredaily.constant.PrefConstants;
+import com.melodyxxx.puredaily.utils.ActivityCollector;
+import com.melodyxxx.puredaily.utils.CommonUtils;
+import com.melodyxxx.puredaily.utils.PrefUtils;
 
 import org.xutils.x;
 
@@ -17,9 +21,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.AppTheme_Red);
+        setTheme(CommonUtils.getSkinStyle(PrefUtils.getInt(this, PrefConstants.CURRENT_SKIN, PrefConstants.DEFAULT_SKIN)));
         x.view().inject(this);
         initToolBar();
+        ActivityCollector.addActivity(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
     private void initToolBar() {

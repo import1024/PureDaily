@@ -1,9 +1,11 @@
 package com.melodyxxx.puredaily.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.TypedValue;
 
 import com.melodyxxx.puredaily.R;
+import com.melodyxxx.puredaily.ui.activity.HomeActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,15 +14,72 @@ import java.util.Date;
 
 /**
  * CommonUtils
- * <p/>
+ * <p>
  * Created by hanjie on 2016/6/2.
  */
 public class CommonUtils {
+
+    public static void restartApp(Context context) {
+        ActivityCollector.finishAll();
+        context.startActivity(new Intent(context, HomeActivity.class));
+    }
 
     public static int getThemePrimaryColor(Context context) {
         final TypedValue value = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.colorPrimary, value, true);
         return value.data;
+    }
+
+    public static int getSkinStyle(int pos) {
+        int style = 0;
+        switch (pos) {
+            case 0:
+                style = R.style.AppTheme_Blue;
+                break;
+            case 1:
+                style = R.style.AppTheme_Light_Blue;
+                break;
+            case 2:
+                style = R.style.AppTheme_Pink;
+                break;
+            case 3:
+                style = R.style.AppTheme_Red;
+                break;
+            case 4:
+                style = R.style.AppTheme_Purple;
+                break;
+            case 5:
+                style = R.style.AppTheme_Deep_Purple;
+                break;
+            case 6:
+                style = R.style.AppTheme_Teal;
+                break;
+            case 7:
+                style = R.style.AppTheme_Deep_Orange;
+                break;
+            case 8:
+                style = R.style.AppTheme_Green;
+                break;
+            case 9:
+                style = R.style.AppTheme_Cyan;
+                break;
+            case 10:
+                style = R.style.AppTheme_Orange;
+                break;
+            case 11:
+                style = R.style.AppTheme_Indigo;
+                break;
+            case 12:
+                style = R.style.AppTheme_Brown;
+                break;
+            case 13:
+                style = R.style.AppTheme_Blue_Gray;
+                break;
+            case 14:
+                style = R.style.AppTheme_Amber;
+                break;
+        }
+        return style;
     }
 
     public static String formatTime(long timeMillis, String pattern) {

@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 
 import com.melodyxxx.puredaily.R;
 import com.melodyxxx.puredaily.constant.PrefConstants;
+import com.melodyxxx.puredaily.ui.fragment.ColorPickerDialogFragment;
 import com.melodyxxx.puredaily.ui.fragment.LatestFragment;
 import com.melodyxxx.puredaily.utils.CommonUtils;
 import com.melodyxxx.puredaily.utils.PrefUtils;
@@ -131,16 +132,22 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_latest_daily: {
                 LatestFragment latestFragment = new LatestFragment();
                 switchFragment(latestFragment);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
                 break;
             }
             case R.id.nav_history_daily: {
                 if (mHistoryDailyClickListener != null) {
                     mHistoryDailyClickListener.onHistoryDailyClick();
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
                 }
                 break;
             }
+            case R.id.nav_skin: {
+                ColorPickerDialogFragment fragment = new ColorPickerDialogFragment();
+                fragment.show(getSupportFragmentManager(), "color_picker");
+                break;
+            }
         }
-        mDrawerLayout.closeDrawer(GravityCompat.START);
         return false;
     }
 
