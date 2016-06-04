@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.melodyxxx.puredaily.R;
 import com.melodyxxx.puredaily.constant.PrefConstants;
@@ -79,6 +80,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         FetchLatestVersionInfoTask.fetch(this, new FetchLatestVersionInfoTask.CallBack() {
             @Override
             public void onSuccess(final LatestVersion latestVersion) {
+                int latestVersionCode = latestVersion.getVersionCode();
+                if (latestVersionCode <= CommonUtils.getVersionCode(HomeActivity.this)) {
+                    return;
+                }
                 DialogUtils.showAlertDialog(HomeActivity.this, String.format(getString(R.string.dialog_title_app_update), latestVersion.getVersionName()), latestVersion.getChangelog(), getString(R.string.dialog_action_update_now), getString(R.string.dialog_action_remind_next_time), null, false, new DialogUtils.DialogCallBack() {
                     @Override
                     public void onPositiveButton(DialogInterface dialog, int which) {

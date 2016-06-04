@@ -79,6 +79,11 @@ public class AboutActivity extends BaseActivity {
         FetchLatestVersionInfoTask.fetch(this, new FetchLatestVersionInfoTask.CallBack() {
             @Override
             public void onSuccess(final LatestVersion latestVersion) {
+                int latestVersionCode = latestVersion.getVersionCode();
+                if (latestVersionCode <= CommonUtils.getVersionCode(AboutActivity.this)) {
+                    SnackBarUtils.makeShort(AboutActivity.this, mHeaderImg, getString(R.string.tip_app_no_update)).show();
+                    return;
+                }
                 DialogUtils.showAlertDialog(AboutActivity.this, String.format(getString(R.string.dialog_title_app_update), latestVersion.getVersionName()), latestVersion.getChangelog(), getString(R.string.dialog_action_update_now), getString(R.string.dialog_action_remind_next_time), null, false, new DialogUtils.DialogCallBack() {
                     @Override
                     public void onPositiveButton(DialogInterface dialog, int which) {
@@ -100,7 +105,7 @@ public class AboutActivity extends BaseActivity {
 
             @Override
             public void onFailed(String errorMsg) {
-                SnackBarUtils.makeShort(AboutActivity.this, mHeaderImg, errorMsg);
+                SnackBarUtils.makeShort(AboutActivity.this, mHeaderImg, errorMsg).show();
             }
         });
     }
