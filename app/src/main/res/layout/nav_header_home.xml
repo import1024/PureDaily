@@ -4,5 +4,4 @@
     android:id="@+id/iv_header"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:scaleType="centerCrop"
-    android:src="@drawable/img_nav_header_day"/>
+    android:scaleType="centerCrop"/>

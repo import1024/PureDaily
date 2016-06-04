@@ -8,6 +8,9 @@ package com.melodyxxx.puredaily.constant;
  */
 public class API {
 
+    // Pure Daily应用检查更新接口
+    public static final String LATEST_VERSION_INFO = "https://coding.net/u/bluehan/p/api/git/raw/master/puredaily/latest_version_info.json";
+
     // 最新消息
     public static final String LATEST = "http://news-at.zhihu.com/api/4/news/latest";
     // 内容获取

@@ -1,7 +1,12 @@
 package com.melodyxxx.puredaily.utils;
 
+import android.app.Activity;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.TypedValue;
 
@@ -160,5 +165,52 @@ public class CommonUtils {
         }
         return week;
     }
+
+    /**
+     * 获取当前App版本号:versionName
+     *
+     * @return 返回当前App的版本号
+     */
+    public static String getVersionName(Context context) {
+        // 得到包管理器
+        PackageManager pm = context.getPackageManager();
+        try {
+            PackageInfo packageInfo = pm.getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    /**
+     * 获取当前App版本号:versionName
+     *
+     * @return 返回当前App的版本号
+     */
+    public static int getVersionCode(Context context) {
+        // 得到包管理器
+        PackageManager pm = context.getPackageManager();
+        try {
+            PackageInfo packageInfo = pm.getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public static void jumpTo(Activity activity, String url) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        activity.startActivity(intent);
+    }
+
+    public static void copy2Clipboard(Activity activity, String content) {
+        ClipboardManager clipboardManager = (ClipboardManager) activity.getSystemService(Activity.CLIPBOARD_SERVICE);
+        clipboardManager.setText(content);
+    }
+
 }
 

@@ -22,4 +22,9 @@
     <color name="material_brown">#795548</color>
     <color name="material_blue_gray">#607D8B</color>
     <color name="material_amber">#FFC107</color>
+
+    <color name="settings_item_title">#BB000000</color>
+    <color name="settings_item_desc">#55000000</color>
+    <color name="dialog_text_color">#99000000</color>
+
 </resources>

@@ -7,7 +7,7 @@
     <string name="transition_latest_with_latest_details">transition_one</string>
     <string name="transition_latest_details_with_comments">transition_two</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">设置</string>
     <string name="action_share">分享</string>
     <string name="dialog_title_share">分享日报内容到</string>
     <string name="activity_title_comment">评论</string>
@@ -15,8 +15,32 @@
     <string name="action_history">历史日报</string>
     <string name="nav_group_other">其他</string>
     <string name="no_pic_mode">无图模式</string>
-    <string name="about">关于</string>
-    <string name="latest_daily">最新日报</string>
-    <string name="history_daily">历史日报</string>
-    <string name="skin">主题皮肤</string>
+    <string name="action_about">关于</string>
+    <string name="action_latest_daily">最新日报</string>
+    <string name="action_history_daily">历史日报</string>
+    <string name="action_skin">主题皮肤</string>
+    <string name="activity_about_version_info">当前版本: %1$s (Build %2$s)</string>
+    <string name="version_change_log">初始版本</string>
+    <string name="change_log">更新日志</string>
+    <string name="to_be_continued">To be continued</string>
+    <string name="activity_about_class_thanks">感谢以下开源项目</string>
+    <string name="thanks_list">▪  Google Design Support Library\n\n▪  xUtils3 - github.com/wyouflf\n\n▪  Glide - github.com/bumptech\n\n▪  AVLoading - github.com/81813780\n\n▪  MaterialDateTimePicker - github.com/wdullaer</string>
+    <string name="activity_about_class_open">Github开源地址（欢迎Star、Fork）</string>
+    <string name="open_source_address">https://github.com/melodyxxx/PureDaily</string>
+    <string name="activity_about_class_statement">声明</string>
+    <string name="app_statement">Pure Daily是一款第三方知乎日报Android客户端，旨在提供美观流畅的阅读体验。感谢izzyleung所分析提供项目所用到的API。若此项目行为或有侵犯知乎权益的嫌疑，烦请告知，本人将删除Github(https://github.com/melodyxxx/PureDaily/)上所有的此项目信息。您在使用此应用的同时，应暸解相关情况，并遵守知乎协议。软件中所包含的信息与内容版权归知乎所有，其中的所有内容均可在知乎获取。</string>
+    <string name="activity_about_class_contact">联系我</string>
+    <string name="copy_success">复制成功</string>
+    <string name="str_contact_weibo">melody_xxxxxxx</string>
+    <string name="activity_settings_class_other">其他</string>
+    <string name="activity_settings_item_off">关闭</string>
+    <string name="activity_settings_item_on">开启</string>
+    <string name="activity_settings_item_auto_check_app_update">自动检查应用更新</string>
+    <string name="activity_title_settings">应用设置</string>
+    <string name="tip_bad_network">请检查网络设置</string>
+    <string name="tip_data_error">数据解析异常</string>
+    <string name="dialog_title_app_update">发现新版本：%1$s</string>
+    <string name="dialog_action_update_now">立即更新</string>
+    <string name="dialog_action_remind_next_time">下次再说</string>
+
 </resources>

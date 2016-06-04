@@ -1,5 +1,6 @@
 package com.melodyxxx.puredaily.ui.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -19,9 +20,12 @@ import android.widget.ImageView;
 
 import com.melodyxxx.puredaily.R;
 import com.melodyxxx.puredaily.constant.PrefConstants;
+import com.melodyxxx.puredaily.entity.LatestVersion;
+import com.melodyxxx.puredaily.task.FetchLatestVersionInfoTask;
 import com.melodyxxx.puredaily.ui.fragment.ColorPickerDialogFragment;
 import com.melodyxxx.puredaily.ui.fragment.LatestFragment;
 import com.melodyxxx.puredaily.utils.CommonUtils;
+import com.melodyxxx.puredaily.utils.DialogUtils;
 import com.melodyxxx.puredaily.utils.PrefUtils;
 import com.melodyxxx.puredaily.utils.StatusBarUtils;
 
@@ -66,6 +70,39 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, latestFragment).commit();
         }
+        if (PrefUtils.getBoolean(this, PrefConstants.AUTO_CHECK_APP_UPDATE, PrefConstants.DEFAULT_CHECK_APP_UPDATE)) {
+            checkLatestVersionInfo();
+        }
+    }
+
+    private void checkLatestVersionInfo() {
+        FetchLatestVersionInfoTask.fetch(this, new FetchLatestVersionInfoTask.CallBack() {
+            @Override
+            public void onSuccess(final LatestVersion latestVersion) {
+                DialogUtils.showAlertDialog(HomeActivity.this, String.format(getString(R.string.dialog_title_app_update), latestVersion.getVersionName()), latestVersion.getChangelog(), getString(R.string.dialog_action_update_now), getString(R.string.dialog_action_remind_next_time), null, false, new DialogUtils.DialogCallBack() {
+                    @Override
+                    public void onPositiveButton(DialogInterface dialog, int which) {
+                        CommonUtils.jumpTo(HomeActivity.this, latestVersion.getDownloadUrl());
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onNegativeButton(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onNeutralButton(DialogInterface dialog, int which) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailed(String errorMsg) {
+
+            }
+        });
     }
 
     private void initNavView() {
@@ -86,9 +123,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         // 初始化抽屉Header ImageView
         mNavHeaderImgView = (ImageView) mNavigationView.getHeaderView(0).findViewById(R.id.iv_header);
         if (CommonUtils.nowIsDay(this)) {
-            mNavHeaderImgView.setImageResource(R.drawable.img_nav_header_day);
+            mNavHeaderImgView.setImageResource(R.drawable.img_header_day);
         } else {
-            mNavHeaderImgView.setImageResource(R.drawable.img_nav_header_night);
+            mNavHeaderImgView.setImageResource(R.drawable.img_header_night);
         }
 
     }
@@ -128,9 +165,11 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings: {
+                SettingsActivity.startSettingsActivity(this);
                 break;
             }
             case R.id.action_history: {
+                // 返回false交由fragment处理
                 return false;
             }
         }
@@ -157,6 +196,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_skin: {
                 ColorPickerDialogFragment fragment = new ColorPickerDialogFragment();
                 fragment.show(getSupportFragmentManager(), "color_picker");
+                break;
+            }
+            case R.id.nav_about: {
+                AboutActivity.startAboutActivity(this);
+                break;
+            }
+            case R.id.nav_settings: {
+                SettingsActivity.startSettingsActivity(this);
                 break;
             }
         }
