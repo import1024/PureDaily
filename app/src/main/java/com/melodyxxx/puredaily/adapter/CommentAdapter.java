@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 /**
  * 评论适配器
- * <p>
+ * <p/>
  * Created by hanjie on 2016/6/2.
  */
 public class CommentAdapter extends BaseAdapter<CommentAdapter.MyViewHolder> {

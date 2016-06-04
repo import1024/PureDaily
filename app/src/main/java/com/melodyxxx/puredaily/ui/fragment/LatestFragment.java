@@ -72,6 +72,7 @@ public class LatestFragment extends BaseFragment implements HomeActivity.OnHisto
         View view = super.onCreateView(inflater, container, savedInstanceState);
         initSwipe();
         startLoadingAnim();
+        Log.d("bingo","startLoadingAnim()");
         fetchLatestData(null);
         return view;
     }

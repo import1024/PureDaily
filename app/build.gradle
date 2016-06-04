@@ -10,10 +10,12 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "0.7.0"
+        resConfigs "zh-rCN"
     }
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

@@ -3,7 +3,7 @@ package com.melodyxxx.puredaily.constant;
 public class PrefConstants {
 
     public static final int DEFAULT_SKIN = 0;
-    public static final boolean DEFAULT_CHECK_APP_UPDATE = false;
+    public static final boolean DEFAULT_CHECK_APP_UPDATE = true;
 
     public static final String CONFIG_SP_FILE_NAME = "config";
 
