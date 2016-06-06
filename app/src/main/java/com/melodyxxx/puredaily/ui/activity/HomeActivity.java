@@ -13,16 +13,17 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SwitchCompat;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.melodyxxx.puredaily.R;
 import com.melodyxxx.puredaily.constant.PrefConstants;
+import com.melodyxxx.puredaily.db.Dao;
 import com.melodyxxx.puredaily.entity.LatestVersion;
 import com.melodyxxx.puredaily.task.FetchLatestVersionInfoTask;
+import com.melodyxxx.puredaily.ui.fragment.CollectionsFragment;
 import com.melodyxxx.puredaily.ui.fragment.ColorPickerDialogFragment;
 import com.melodyxxx.puredaily.ui.fragment.LatestFragment;
 import com.melodyxxx.puredaily.utils.CommonUtils;
@@ -46,15 +47,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private SwitchCompat mPicModeSwitch;
 
-    private OnHistoryDailyClickListener mHistoryDailyClickListener;
-
-    public void setHistoryDailyClickListener(OnHistoryDailyClickListener historyDailyClickListener) {
-        mHistoryDailyClickListener = historyDailyClickListener;
-    }
-
-    public interface OnHistoryDailyClickListener {
-        void onHistoryDailyClick();
-    }
+    private TextView mCollectionsCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +60,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             if (savedInstanceState != null) {
                 return;
             }
-            LatestFragment latestFragment = new LatestFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, latestFragment).commit();
+            switchFragment(new LatestFragment());
         }
         if (PrefUtils.getBoolean(this, PrefConstants.AUTO_CHECK_APP_UPDATE, PrefConstants.DEFAULT_CHECK_APP_UPDATE)) {
             checkLatestVersionInfo();
@@ -111,11 +102,17 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initNavView() {
+        // 初始化抽屉Header ImageView
+        mNavHeaderImgView = (ImageView) mNavigationView.getHeaderView(0).findViewById(R.id.iv_header);
+        if (CommonUtils.nowIsDay(this)) {
+            mNavHeaderImgView.setImageResource(R.drawable.img_header_day);
+        } else {
+            mNavHeaderImgView.setImageResource(R.drawable.img_header_night);
+        }
         // 初始化抽屉无图模式SwitchCompat
         Menu menu = mNavigationView.getMenu();
         MenuItem picModeMenuItem = menu.findItem(R.id.nav_pic_mode);
-        View picModeActionView = MenuItemCompat.getActionView(picModeMenuItem);
-        mPicModeSwitch = (SwitchCompat) picModeActionView.findViewById(R.id.view_switch);
+        mPicModeSwitch = (SwitchCompat) MenuItemCompat.getActionView(picModeMenuItem).findViewById(R.id.view_switch);
         mPicModeSwitch.setChecked(PrefUtils.getBoolean(this, PrefConstants.MODE_NO_PIC, false));
         mPicModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -125,14 +122,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 switchFragment(new LatestFragment());
             }
         });
-        // 初始化抽屉Header ImageView
-        mNavHeaderImgView = (ImageView) mNavigationView.getHeaderView(0).findViewById(R.id.iv_header);
-        if (CommonUtils.nowIsDay(this)) {
-            mNavHeaderImgView.setImageResource(R.drawable.img_header_day);
-        } else {
-            mNavHeaderImgView.setImageResource(R.drawable.img_header_night);
-        }
+        // 初始化收藏夹数量TextView
+        MenuItem collectionsMenuItem = menu.findItem(R.id.nav_collections);
+        mCollectionsCount = (TextView) MenuItemCompat.getActionView(collectionsMenuItem).findViewById(R.id.text_view);
+        updateCollectionsCount();
+    }
 
+    private void updateCollectionsCount() {
+        mCollectionsCount.setText(String.valueOf(Dao.getInstance(this).getCountOfCollections()));
     }
 
     private void initDrawerLayout() {
@@ -151,6 +148,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        updateCollectionsCount();
+    }
+
+    @Override
     public void onBackPressed() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -162,7 +165,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_home, menu);
+        getMenuInflater().inflate(R.menu.menu_home_activity, menu);
         return true;
     }
 
@@ -172,10 +175,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.action_settings: {
                 SettingsActivity.startSettingsActivity(this);
                 break;
-            }
-            case R.id.action_history: {
-                // 返回false交由fragment处理
-                return false;
             }
         }
         return super.onOptionsItemSelected(item);
@@ -191,11 +190,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 mDrawerLayout.closeDrawer(GravityCompat.START);
                 break;
             }
-            case R.id.nav_history_daily: {
-                if (mHistoryDailyClickListener != null) {
-                    mHistoryDailyClickListener.onHistoryDailyClick();
-                    mDrawerLayout.closeDrawer(GravityCompat.START);
-                }
+            case R.id.nav_collections: {
+                CollectionsFragment collectionsFragment = new CollectionsFragment();
+                switchFragment(collectionsFragment);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
                 break;
             }
             case R.id.nav_skin: {

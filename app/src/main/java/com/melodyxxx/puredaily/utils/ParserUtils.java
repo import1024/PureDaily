@@ -27,20 +27,20 @@ public class ParserUtils {
     public static ArrayList<Latest> parseLatestResult(String result) throws JSONException {
         ArrayList<Latest> stories = new ArrayList<Latest>();
         JSONObject resultJObj = new JSONObject(result);
-        JSONArray storiesJArray = resultJObj.getJSONArray("stories");
-        JSONObject storyJObj = null;
+        JSONArray latestsJArray = resultJObj.getJSONArray("stories");
+        JSONObject latestJObj = null;
         JSONArray imagesJArray = null;
-        for (int pos = 0; pos < storiesJArray.length(); pos++) {
-            storyJObj = storiesJArray.getJSONObject(pos);
+        for (int pos = 0; pos < latestsJArray.length(); pos++) {
+            latestJObj = latestsJArray.getJSONObject(pos);
             Latest latest = new Latest();
-            latest.setTitle(storyJObj.getString("title"));
-            latest.setGa_prefix(storyJObj.getString("ga_prefix"));
-            latest.setType(storyJObj.getString("type"));
-            latest.setId(storyJObj.getString("id"));
-            if (storyJObj.has("multipic")) {
-                latest.setMultipic(storyJObj.getBoolean("multipic"));
+            latest.setTitle(latestJObj.getString("title"));
+            latest.setGa_prefix(latestJObj.getString("ga_prefix"));
+            latest.setType(latestJObj.getString("type"));
+            latest.setId(latestJObj.getString("id"));
+            if (latestJObj.has("multipic")) {
+                latest.setMultipic(latestJObj.getBoolean("multipic"));
             }
-            imagesJArray = storyJObj.getJSONArray("images");
+            imagesJArray = latestJObj.getJSONArray("images");
             if (imagesJArray.length() != 0) {
                 latest.setImageUrl(imagesJArray.getString(0));
             }
@@ -63,6 +63,10 @@ public class ParserUtils {
         latestDetails.setImageSource(resultJObj.getString("image_source"));
         latestDetails.setTitle(resultJObj.getString("title"));
         latestDetails.setImageUrl(resultJObj.getString("image"));
+        JSONArray smallImagesJArray = resultJObj.getJSONArray("images");
+        if (smallImagesJArray.length() != 0) {
+            latestDetails.setSmallImageUrl(smallImagesJArray.getString(0));
+        }
         latestDetails.setShareUrl(resultJObj.getString("share_url"));
         latestDetails.setId(resultJObj.getString("id"));
         latestDetails.setType(resultJObj.getString("type"));

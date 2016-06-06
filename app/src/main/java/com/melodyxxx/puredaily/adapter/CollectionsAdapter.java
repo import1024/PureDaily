@@ -13,32 +13,33 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.melodyxxx.puredaily.R;
 import com.melodyxxx.puredaily.constant.PrefConstants;
+import com.melodyxxx.puredaily.entity.Collection;
 import com.melodyxxx.puredaily.entity.Latest;
 import com.melodyxxx.puredaily.utils.PrefUtils;
 
 import java.util.ArrayList;
 
 /**
- * 最新消息适配器
+ * 收藏夹适配器
  * <p>
  * Created by hanjie on 2016/5/31.
  */
-public class LatestAdapter extends BaseAdapter<LatestAdapter.MyViewHolder> {
+public class CollectionsAdapter extends BaseAdapter<CollectionsAdapter.MyViewHolder> {
 
-    private ArrayList<Latest> mLatests;
+    private ArrayList<Collection> mCollections;
     private Context mContext;
 
-    public LatestAdapter(Context context, ArrayList<Latest> latests) {
+    public CollectionsAdapter(Context context, ArrayList<Collection> collections) {
         this.mContext = context;
-        mLatests = latests;
+        mCollections = collections;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        Latest latest = mLatests.get(position);
-        String imageUrl = latest.getImageUrl();
-        String title = latest.getTitle();
+        Collection collection = mCollections.get(position);
+        String imageUrl = collection.getImgUrl();
+        String title = collection.getTitle();
         if (!PrefUtils.getBoolean(mContext, PrefConstants.MODE_NO_PIC, false)) {
             Glide.with(mContext)
                     .load(imageUrl)
@@ -54,8 +55,8 @@ public class LatestAdapter extends BaseAdapter<LatestAdapter.MyViewHolder> {
         setAnimation(holder.itemView);
     }
 
-    public void syncData(ArrayList<Latest> latests) {
-        this.mLatests = latests;
+    public void syncData(ArrayList<Collection> collections) {
+        this.mCollections = collections;
     }
 
     @Override
@@ -67,7 +68,15 @@ public class LatestAdapter extends BaseAdapter<LatestAdapter.MyViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mLatests.size();
+        return mCollections.size();
+    }
+
+    /**
+     * 删除数据
+     */
+    public void delete(int position) {
+        this.mCollections.remove(position);
+        notifyItemRemoved(position);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

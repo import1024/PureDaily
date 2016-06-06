@@ -29,12 +29,6 @@
             android:animateLayoutChanges="true"
             android:orientation="vertical">
 
-            <com.melodyxxx.puredaily.widget.TipTitleView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                app:pure_icon="@drawable/ic_settings_others"
-                app:pure_title="@string/activity_settings_class_other"/>
-
             <com.melodyxxx.puredaily.widget.CheckBoxItemView
                 android:id="@+id/item_auto_check_app_update"
                 android:layout_width="match_parent"

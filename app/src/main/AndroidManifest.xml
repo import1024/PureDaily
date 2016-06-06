@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.LatestDetailsActivity"
+            android:name=".ui.activity.DailyDetailsActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.CommentActivity"

@@ -9,22 +9,13 @@ public class LatestDetails {
     private String imageSource;
     private String title;
     private String imageUrl;
+    private String smallImageUrl;
     private String shareUrl;
     private String type;
     private String id;
 
     public LatestDetails() {
 
-    }
-
-    public LatestDetails(String body, String imageSource, String title, String imageUrl, String shareUrl, String type, String id) {
-        this.body = body;
-        this.imageSource = imageSource;
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.shareUrl = shareUrl;
-        this.type = type;
-        this.id = id;
     }
 
     public String getBody() {
@@ -83,16 +74,12 @@ public class LatestDetails {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return "LatestDetails{" +
-                "body='" + body + '\'' +
-                ", imageSource='" + imageSource + '\'' +
-                ", title='" + title + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", shareUrl='" + shareUrl + '\'' +
-                ", type='" + type + '\'' +
-                ", id='" + id + '\'' +
-                '}';
+    public String getSmallImageUrl() {
+        return smallImageUrl;
     }
+
+    public void setSmallImageUrl(String smallImageUrl) {
+        this.smallImageUrl = smallImageUrl;
+    }
+
 }

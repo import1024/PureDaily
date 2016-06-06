@@ -60,13 +60,12 @@ public class CommentActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         StatusBarUtils.setStatusBarColor(this, CommonUtils.getThemePrimaryColor(this));
         setToolbarTitle(R.string.activity_title_comment);
-        Latest latest = (Latest) getIntent().getSerializableExtra("latest");
         startLoadingAnim();
-        featchCommentData(latest);
+        featchCommentData(getIntent().getStringExtra("id"));
     }
 
-    private void featchCommentData(final Latest latest) {
-        FetchCommentTask.fetch(latest.getId(), FetchCommentTask.TYPE_LONG_COMMENT, new FetchCommentTask.FetchLatestCallback() {
+    private void featchCommentData(final String id) {
+        FetchCommentTask.fetch(id, FetchCommentTask.TYPE_LONG_COMMENT, new FetchCommentTask.FetchLatestCallback() {
             @Override
             public void onSuccess(ArrayList<Comment> comments) {
                 mComments.addAll(comments);
@@ -75,12 +74,12 @@ public class CommentActivity extends BaseActivity {
                     mLongCommentStartPos = 0;
                     mLongCommentSize = comments.size();
                 }
-                FetchCommentTask.fetch(latest.getId(), FetchCommentTask.TYPE_SHORT_COMMENT, new FetchCommentTask.FetchLatestCallback() {
+                FetchCommentTask.fetch(id, FetchCommentTask.TYPE_SHORT_COMMENT, new FetchCommentTask.FetchLatestCallback() {
                     @Override
                     public void onSuccess(ArrayList<Comment> comments) {
                         stopLoadingAnim();
                         mComments.addAll(comments);
-                        if (mComments.size() == 100) {
+                        if (mComments.size() == 0) {
                             // 无长评&短评
                             mNoDataArea.setVisibility(View.VISIBLE);
                             return;
@@ -121,11 +120,9 @@ public class CommentActivity extends BaseActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    public static void startCommentActivity(Activity activity, Latest latest, View view) {
+    public static void startCommentActivity(Activity activity, String id, View view) {
         Intent intent = new Intent(activity, CommentActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("latest", latest);
-        intent.putExtras(bundle);
+        intent.putExtra("id", id);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity, view, activity.getString(R.string.transition_latest_details_with_comments)).toBundle());
         } else {

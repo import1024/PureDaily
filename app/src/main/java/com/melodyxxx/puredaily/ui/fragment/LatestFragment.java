@@ -8,10 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.melodyxxx.puredaily.R;
 import com.melodyxxx.puredaily.adapter.BaseAdapter;
@@ -19,7 +20,7 @@ import com.melodyxxx.puredaily.adapter.LatestAdapter;
 import com.melodyxxx.puredaily.entity.Latest;
 import com.melodyxxx.puredaily.task.FetchLatestTask;
 import com.melodyxxx.puredaily.ui.activity.HomeActivity;
-import com.melodyxxx.puredaily.ui.activity.LatestDetailsActivity;
+import com.melodyxxx.puredaily.ui.activity.DailyDetailsActivity;
 import com.melodyxxx.puredaily.utils.CommonUtils;
 import com.melodyxxx.puredaily.utils.DividerItemDecoration;
 import com.melodyxxx.puredaily.utils.SnackBarUtils;
@@ -37,7 +38,7 @@ import java.util.Calendar;
  * Created by hanjie on 2016/5/31.
  */
 @ContentView(R.layout.fragment_latest)
-public class LatestFragment extends BaseFragment implements HomeActivity.OnHistoryDailyClickListener {
+public class LatestFragment extends BaseFragment {
 
     @ViewInject(R.id.recycler_view)
     private RecyclerView mRecyclerView;
@@ -52,7 +53,7 @@ public class LatestFragment extends BaseFragment implements HomeActivity.OnHisto
 
     private LatestAdapter mAdapter;
 
-    private ArrayList<Latest> mStories;
+    private ArrayList<Latest> mLatests;
 
     @Override
     public void onAttach(Context context) {
@@ -69,25 +70,12 @@ public class LatestFragment extends BaseFragment implements HomeActivity.OnHisto
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ((HomeActivity) getActivity()).setToolbarTitle(R.string.fragment_title_latest);
         View view = super.onCreateView(inflater, container, savedInstanceState);
         initSwipe();
         startLoadingAnim();
-        Log.d("bingo","startLoadingAnim()");
         fetchLatestData(null);
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        ((HomeActivity) getActivity()).setHistoryDailyClickListener(this);
-    }
-
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        ((HomeActivity) getActivity()).setHistoryDailyClickListener(null);
     }
 
     private void initSwipe() {
@@ -125,11 +113,11 @@ public class LatestFragment extends BaseFragment implements HomeActivity.OnHisto
         if (homeActivity != null) {
             homeActivity.setToolbarTitle(CommonUtils.formatResultDate(resultDate));
         }
-        this.mStories = latests;
+        this.mLatests = latests;
         if (mAdapter == null) {
             initRecyclerView();
         } else {
-            mAdapter.syncData(mStories);
+            mAdapter.syncData(mLatests);
             mAdapter.notifyDataSetChanged();
         }
         if (mSwipe.isRefreshing()) {
@@ -139,7 +127,7 @@ public class LatestFragment extends BaseFragment implements HomeActivity.OnHisto
     }
 
     private void initRecyclerView() {
-        mAdapter = new LatestAdapter(mContext, mStories);
+        mAdapter = new LatestAdapter(mContext, mLatests);
         RecyclerView.LayoutManager lm = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(lm);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, LinearLayoutManager.VERTICAL));
@@ -147,7 +135,7 @@ public class LatestFragment extends BaseFragment implements HomeActivity.OnHisto
         mAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, int position) {
-                LatestDetailsActivity.startLatestDetailsActivity(getActivity(), mStories.get(position), ((LatestAdapter.MyViewHolder) holder).image);
+                DailyDetailsActivity.startDailyDetailsActivity(getActivity(), mLatests.get(position).getId(), ((LatestAdapter.MyViewHolder) holder).image);
             }
         });
     }
@@ -165,6 +153,12 @@ public class LatestFragment extends BaseFragment implements HomeActivity.OnHisto
 
     private void stopLoadingAnim() {
         mLoadingView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_latest_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -199,9 +193,4 @@ public class LatestFragment extends BaseFragment implements HomeActivity.OnHisto
         dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
     }
 
-
-    @Override
-    public void onHistoryDailyClick() {
-        displayCalendarChooser();
-    }
 }

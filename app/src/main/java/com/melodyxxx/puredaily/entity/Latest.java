@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * Created by hanjie on 2016/5/31.
  */
-public class Latest implements Serializable {
+public class Latest {
 
     private String title;
     private String imageUrl;

@@ -9,9 +9,10 @@
             android:icon="@drawable/ic_menu_latest"
             android:title="@string/action_latest_daily"/>
         <item
-            android:id="@+id/nav_history_daily"
-            android:icon="@drawable/ic_menu_history"
-            android:title="@string/action_history_daily"/>
+            android:id="@+id/nav_collections"
+            android:icon="@drawable/ic_menu_collections"
+            android:title="@string/action_collections"
+            app:actionLayout="@layout/action_view_pure_text"/>
     </group>
 
     <item android:title="@string/nav_group_other">

@@ -12,16 +12,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.melodyxxx.puredaily.R;
 import com.melodyxxx.puredaily.constant.PrefConstants;
-import com.melodyxxx.puredaily.entity.Latest;
+import com.melodyxxx.puredaily.db.Dao;
+import com.melodyxxx.puredaily.entity.Collection;
 import com.melodyxxx.puredaily.entity.LatestDetails;
 import com.melodyxxx.puredaily.task.FetchLatestDetailsTask;
 import com.melodyxxx.puredaily.utils.PrefUtils;
@@ -36,7 +37,7 @@ import org.xutils.view.annotation.ViewInject;
  * Created by hanjie on 2016/6/1.
  */
 @ContentView(R.layout.activity_latest_details)
-public class LatestDetailsActivity extends BaseActivity {
+public class DailyDetailsActivity extends BaseActivity {
 
     @ViewInject(R.id.iv_image)
     private ImageView mImage;
@@ -56,9 +57,11 @@ public class LatestDetailsActivity extends BaseActivity {
     @ViewInject(R.id.fab)
     private FloatingActionButton mFab;
 
-    private Latest mLatest;
+    private String mId;
 
     private LatestDetails mLatestDetails;
+
+    private Dao mDao;
 
 
     @Override
@@ -69,15 +72,16 @@ public class LatestDetailsActivity extends BaseActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+        mDao = Dao.getInstance(this);
         mCollapsingToolbarLayout.setTitle(" ");
-        mLatest = (Latest) getIntent().getSerializableExtra("latest");
+        mId = getIntent().getStringExtra("id");
         initWebView();
         startLoadingAnim();
         fetchLatestDetailsData();
     }
 
     private void fetchLatestDetailsData() {
-        FetchLatestDetailsTask.fetch(mLatest.getId(), new FetchLatestDetailsTask.FetchLatestCallback() {
+        FetchLatestDetailsTask.fetch(mId, new FetchLatestDetailsTask.FetchLatestCallback() {
             @Override
             public void onSuccess(LatestDetails latestDetails) {
                 onFetchSuccess(latestDetails);
@@ -86,7 +90,7 @@ public class LatestDetailsActivity extends BaseActivity {
 
             @Override
             public void onError(String errorMsg) {
-                SnackBarUtils.makeShort(LatestDetailsActivity.this, mLoadingView, errorMsg).show();
+                SnackBarUtils.makeShort(DailyDetailsActivity.this, mLoadingView, errorMsg).show();
                 stopLoadingAnim();
             }
         });
@@ -94,7 +98,7 @@ public class LatestDetailsActivity extends BaseActivity {
 
     @Event(value = R.id.fab, type = View.OnClickListener.class)
     private void onFabClick(View view) {
-        CommentActivity.startCommentActivity(this, mLatest, mFab);
+        CommentActivity.startCommentActivity(this, mId, mFab);
     }
 
     private void onFetchSuccess(LatestDetails latestDetails) {
@@ -105,7 +109,7 @@ public class LatestDetailsActivity extends BaseActivity {
             mCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
             mCollapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
             if (!PrefUtils.getBoolean(this, PrefConstants.MODE_NO_PIC, false)) {
-                Glide.with(LatestDetailsActivity.this)
+                Glide.with(DailyDetailsActivity.this)
                         .load(mLatestDetails.getImageUrl())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .dontTransform()
@@ -129,11 +133,9 @@ public class LatestDetailsActivity extends BaseActivity {
         mWebView.getSettings().setBlockNetworkImage(PrefUtils.getBoolean(this, PrefConstants.MODE_NO_PIC, false));
     }
 
-    public static void startLatestDetailsActivity(Activity activity, Latest latest, View view) {
-        Intent intent = new Intent(activity, LatestDetailsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("latest", latest);
-        intent.putExtras(bundle);
+    public static void startDailyDetailsActivity(Activity activity, String id, View view) {
+        Intent intent = new Intent(activity, DailyDetailsActivity.class);
+        intent.putExtra("id", id);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !PrefUtils.getBoolean(activity, PrefConstants.MODE_NO_PIC, false)) {
             // Android 5.0+ && 没有开启无图模式 开启共享元素动画
             activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity, view, activity.getString(R.string.transition_latest_with_latest_details)).toBundle());
@@ -144,7 +146,14 @@ public class LatestDetailsActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_latest, menu);
+        getMenuInflater().inflate(R.menu.menu_daily_details, menu);
+
+        // 初始化收藏菜单状态
+        boolean isCollected = mDao.isExistInCollections(mId);
+        MenuItem collectItem = menu.findItem(R.id.action_collect);
+        collectItem.setIcon(isCollected ? R.drawable.ic_collected : R.drawable.ic_collect);
+        collectItem.setChecked(isCollected);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -153,6 +162,29 @@ public class LatestDetailsActivity extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.action_share: {
                 shareStory();
+                break;
+            }
+            case R.id.action_collect: {
+                if (mLatestDetails == null) {
+                    break;
+                }
+                // 构建Collection对象
+                Collection collection = new Collection();
+                collection.setId(mLatestDetails.getId());
+                collection.setTitle(mLatestDetails.getTitle());
+                collection.setImgUrl(mLatestDetails.getSmallImageUrl());
+                collection.setTime(System.currentTimeMillis());
+                boolean isCollected = item.isChecked();
+                if (isCollected) {
+                    mDao.removeFromCollections(mLatestDetails.getId());
+                    item.setIcon(R.drawable.ic_collect);
+                    SnackBarUtils.makeShort(this, mWebView, getString(R.string.cancel_collect)).show();
+                } else {
+                    mDao.insertToCollections(collection);
+                    item.setIcon(R.drawable.ic_collected);
+                    SnackBarUtils.makeShort(this, mWebView, getString(R.string.collected)).show();
+                }
+                item.setChecked(!isCollected);
                 break;
             }
         }
