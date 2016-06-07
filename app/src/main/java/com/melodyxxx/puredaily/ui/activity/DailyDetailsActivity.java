@@ -5,12 +5,16 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -36,7 +40,7 @@ import org.xutils.view.annotation.ViewInject;
  * Created by hanjie on 2016/6/1.
  */
 @ContentView(R.layout.activity_latest_details)
-public class DailyDetailsActivity extends BaseActivity {
+public class DailyDetailsActivity extends BaseActivity implements NestedScrollView.OnScrollChangeListener, AppBarLayout.OnOffsetChangedListener {
 
     @ViewInject(R.id.iv_image)
     private ImageView mImage;
@@ -47,6 +51,9 @@ public class DailyDetailsActivity extends BaseActivity {
     @ViewInject(R.id.collapsing_toolbar)
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
 
+    @ViewInject(R.id.app_bar)
+    private AppBarLayout mAppBarLayout;
+
     @ViewInject(R.id.loading)
     private AVLoadingIndicatorView mLoadingView;
 
@@ -55,6 +62,12 @@ public class DailyDetailsActivity extends BaseActivity {
 
     @ViewInject(R.id.fab)
     private FloatingActionButton mFab;
+
+    @ViewInject(R.id.fab_go_to_top)
+    private FloatingActionButton mGoToTopFab;
+
+    @ViewInject(R.id.nested_scrollview)
+    private NestedScrollView mNestedScrollView;
 
     private String mId;
 
@@ -74,9 +87,25 @@ public class DailyDetailsActivity extends BaseActivity {
         mDao = Dao.getInstance(this);
         mCollapsingToolbarLayout.setTitle(" ");
         mId = getIntent().getStringExtra("id");
+        initListener();
         initWebView();
         startLoadingAnim();
         fetchLatestDetailsData();
+        hideGoToTopFab();
+    }
+
+    private void initListener() {
+        mAppBarLayout.addOnOffsetChangedListener(this);
+        mNestedScrollView.setOnScrollChangeListener(this);
+    }
+
+    private void hideGoToTopFab() {
+        mNestedScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                mGoToTopFab.hide();
+            }
+        });
     }
 
     private void fetchLatestDetailsData() {
@@ -98,6 +127,11 @@ public class DailyDetailsActivity extends BaseActivity {
     @Event(value = R.id.fab, type = View.OnClickListener.class)
     private void onFabClick(View view) {
         CommentActivity.startCommentActivity(this, mId, mFab);
+    }
+
+    @Event(value = R.id.fab_go_to_top, type = View.OnClickListener.class)
+    private void onFabToTopClick(View view) {
+        mNestedScrollView.smoothScrollTo(0, 0);
     }
 
     private void onFetchSuccess(LatestDetails latestDetails) {
@@ -227,6 +261,23 @@ public class DailyDetailsActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         mWebView.destroy();
+    }
+
+    @Override
+    public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        if ((oldScrollY - scrollY) > ViewConfiguration.get(this).getScaledTouchSlop()) {
+            mGoToTopFab.show();
+        } else if ((scrollY - oldScrollY > ViewConfiguration.get(this).getScaledTouchSlop())) {
+            mGoToTopFab.hide();
+        }
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        if (verticalOffset != 0) {
+            // 展开状态
+            mGoToTopFab.hide();
+        }
     }
 
 }

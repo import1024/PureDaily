@@ -71,6 +71,7 @@
             app:layout_anchorGravity="bottom|end"/>
 
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nested_scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -92,5 +93,13 @@
         android:layout_gravity="center"
         app:indicator="TriangleSkewSpin"
         app:indicator_color="?attr/colorPrimary"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_go_to_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="25dp"
+        android:src="@drawable/ic_fab_go_to_top"/>
 
 </FrameLayout>
