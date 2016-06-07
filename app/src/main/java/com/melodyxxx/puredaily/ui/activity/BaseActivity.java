@@ -1,5 +1,6 @@
 package com.melodyxxx.puredaily.ui.activity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         setTheme(CommonUtils.getSkinStyle(PrefUtils.getInt(this, PrefConstants.CURRENT_SKIN, PrefConstants.DEFAULT_SKIN)));
         x.view().inject(this);
         initToolBar();
+        // NavigationBar跟随主题色
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(CommonUtils.getThemePrimaryColor(this));
+        }
         ActivityCollector.addActivity(this);
     }
 

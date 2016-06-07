@@ -19,7 +19,7 @@
     <string name="action_latest_daily">最新日报</string>
     <string name="action_skin">主题皮肤</string>
     <string name="activity_about_version_info">当前版本: %1$s (Build %2$s)</string>
-    <string name="version_change_log">已完成：\n\n最新日报、历史日报、评论查看模块，自动离线阅读过的内容\n\n未完成：\n\n主题日报、热门消息、栏目日报</string>
+    <string name="version_change_log">新增：收藏功能\n\n新增：阅读时可快速滑动到顶部\n\n新增：底部导航栏跟随主题色</string>
     <string name="change_log">更新日志</string>
     <string name="to_be_continued">To be continued</string>
     <string name="activity_about_class_thanks">感谢以下开源项目</string>
