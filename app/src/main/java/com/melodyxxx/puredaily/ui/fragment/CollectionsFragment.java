@@ -1,9 +1,11 @@
 package com.melodyxxx.puredaily.ui.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -18,11 +20,14 @@ import android.widget.LinearLayout;
 import com.melodyxxx.puredaily.R;
 import com.melodyxxx.puredaily.adapter.BaseAdapter;
 import com.melodyxxx.puredaily.adapter.CollectionsAdapter;
+import com.melodyxxx.puredaily.constant.PrefConstants;
 import com.melodyxxx.puredaily.db.Dao;
 import com.melodyxxx.puredaily.entity.Collection;
 import com.melodyxxx.puredaily.ui.activity.DailyDetailsActivity;
 import com.melodyxxx.puredaily.ui.activity.HomeActivity;
+import com.melodyxxx.puredaily.utils.DialogUtils;
 import com.melodyxxx.puredaily.utils.DividerItemDecoration;
+import com.melodyxxx.puredaily.utils.PrefUtils;
 import com.melodyxxx.puredaily.utils.SnackBarUtils;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -66,6 +71,29 @@ public class CollectionsFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         mDao = Dao.getInstance(mContext);
         setHasOptionsMenu(true);
+        if (!PrefUtils.getBoolean(mContext, PrefConstants.COLLECTIONS_TIPS_SHOWED, false)) {
+            showTipsDialog();
+        }
+    }
+
+    private void showTipsDialog() {
+        DialogUtils.showAlertDialog(mContext, R.string.tips, R.string.tip_content_collections_manage, R.string.dialog_action_confirm, 0, 0, false, new DialogUtils.DialogCallBack() {
+            @Override
+            public void onPositiveButton(DialogInterface dialog, int which) {
+                PrefUtils.putBoolean(mContext, PrefConstants.COLLECTIONS_TIPS_SHOWED, true);
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onNegativeButton(DialogInterface dialog, int which) {
+
+            }
+
+            @Override
+            public void onNeutralButton(DialogInterface dialog, int which) {
+
+            }
+        });
     }
 
     @Nullable

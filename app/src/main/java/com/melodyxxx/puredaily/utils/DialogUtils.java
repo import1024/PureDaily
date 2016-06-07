@@ -19,6 +19,17 @@ public class DialogUtils {
         void onNeutralButton(DialogInterface dialog, int which);
     }
 
+    public static void showAlertDialog(Context context, int titleResId, int descResId, int positiveButtonTextResId, int negativeButtonTextResId, int neutralButtonTextResId, boolean cancelable, DialogCallBack callBack) {
+        showAlertDialog(context,
+                titleResId == 0 ? null : context.getString(titleResId),
+                descResId == 0 ? null : context.getString(descResId),
+                positiveButtonTextResId == 0 ? null : context.getString(positiveButtonTextResId),
+                negativeButtonTextResId == 0 ? null : context.getString(negativeButtonTextResId),
+                neutralButtonTextResId == 0 ? null : context.getString(neutralButtonTextResId),
+                cancelable,
+                callBack);
+    }
+
     public static void showAlertDialog(Context context, String title, String desc, String positiveButtonText, String negativeButtonText, String neutralButtonText, boolean cancelable, final DialogCallBack callBack) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title);

@@ -10,5 +10,6 @@ public class PrefConstants {
     public static final String MODE_NO_PIC = "mode_no_pic";
     public static final String CURRENT_SKIN = "current_skin";
     public static final String AUTO_CHECK_APP_UPDATE = "auto_check_app_update";
+    public static final String COLLECTIONS_TIPS_SHOWED = "collections_tips_showed";
 
 }
