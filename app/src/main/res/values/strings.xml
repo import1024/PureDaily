@@ -46,7 +46,9 @@
     <string name="fragment_title_collections">收藏</string>
     <string name="fragment_title_latest">最新日报</string>
     <string name="action_collect">收藏</string>
-    <string name="cancel_collect">已取消收藏</string>
-    <string name="collected">已收藏</string>
+    <string name="tip_cancel_collect">已取消收藏</string>
+    <string name="tip_collected">已收藏</string>
+    <string name="action_clear_all">清空</string>
+    <string name="tip_clear_all_collections">已清空所有收藏</string>
 
 </resources>

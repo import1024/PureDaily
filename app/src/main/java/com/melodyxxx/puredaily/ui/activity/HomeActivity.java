@@ -125,10 +125,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         // 初始化收藏夹数量TextView
         MenuItem collectionsMenuItem = menu.findItem(R.id.nav_collections);
         mCollectionsCount = (TextView) MenuItemCompat.getActionView(collectionsMenuItem).findViewById(R.id.text_view);
-        updateCollectionsCount();
     }
 
-    private void updateCollectionsCount() {
+    public void updateCollectionsCount() {
         mCollectionsCount.setText(String.valueOf(Dao.getInstance(this).getCountOfCollections()));
     }
 
@@ -148,8 +147,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         updateCollectionsCount();
     }
 

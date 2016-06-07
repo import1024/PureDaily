@@ -15,7 +15,6 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -178,11 +177,11 @@ public class DailyDetailsActivity extends BaseActivity {
                 if (isCollected) {
                     mDao.removeFromCollections(mLatestDetails.getId());
                     item.setIcon(R.drawable.ic_collect);
-                    SnackBarUtils.makeShort(this, mWebView, getString(R.string.cancel_collect)).show();
+                    SnackBarUtils.makeShort(this, mWebView, getString(R.string.tip_cancel_collect)).show();
                 } else {
                     mDao.insertToCollections(collection);
                     item.setIcon(R.drawable.ic_collected);
-                    SnackBarUtils.makeShort(this, mWebView, getString(R.string.collected)).show();
+                    SnackBarUtils.makeShort(this, mWebView, getString(R.string.tip_collected)).show();
                 }
                 item.setChecked(!isCollected);
                 break;

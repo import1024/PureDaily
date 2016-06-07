@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 /**
  * CRUD for database
- * <p>
+ * <p/>
  * Created by hanjie on 2016/6/6.
  */
 public class Dao implements DatabaseConstants {
@@ -102,6 +102,10 @@ public class Dao implements DatabaseConstants {
             cursor.close();
         }
         return count;
+    }
+
+    public void clearCollections() {
+        mDB.execSQL("DELETE FROM " + TABLE_COLLECTIONS);
     }
 
 

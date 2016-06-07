@@ -3,12 +3,14 @@ package com.melodyxxx.puredaily.ui.fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -21,6 +23,7 @@ import com.melodyxxx.puredaily.entity.Collection;
 import com.melodyxxx.puredaily.ui.activity.DailyDetailsActivity;
 import com.melodyxxx.puredaily.ui.activity.HomeActivity;
 import com.melodyxxx.puredaily.utils.DividerItemDecoration;
+import com.melodyxxx.puredaily.utils.SnackBarUtils;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.xutils.view.annotation.ContentView;
@@ -69,9 +72,7 @@ public class CollectionsFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ((HomeActivity) getActivity()).setToolbarTitle(R.string.fragment_title_collections);
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-        fetchDataFromDatabase();
-        return view;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     private void initRecyclerView() {
@@ -98,6 +99,7 @@ public class CollectionsFragment extends BaseFragment {
                 int deletePosition = viewHolder.getLayoutPosition();
                 mDao.removeFromCollections(mCollections.get(deletePosition).getId());
                 mAdapter.delete(deletePosition);
+                ((HomeActivity) getActivity()).updateCollectionsCount();
             }
         });
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
@@ -127,10 +129,31 @@ public class CollectionsFragment extends BaseFragment {
                     initRecyclerView();
                 } else {
                     mAdapter.syncData(mCollections);
+                    mAdapter.notifyDataSetChanged();
                 }
                 super.onPostExecute(aVoid);
             }
         }.execute();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_clear_all_collections: {
+                mDao.clearCollections();
+                fetchDataFromDatabase();
+                ((HomeActivity) getActivity()).updateCollectionsCount();
+                SnackBarUtils.makeShort(mContext, mEmptyView, getString(R.string.tip_clear_all_collections)).show();
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_collections_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private void startLoadingAnim() {
@@ -147,6 +170,12 @@ public class CollectionsFragment extends BaseFragment {
         mRecyclerView.setVisibility(View.GONE);
         mLoadingView.setVisibility(View.GONE);
         mEmptyView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        fetchDataFromDatabase();
     }
 
 }
