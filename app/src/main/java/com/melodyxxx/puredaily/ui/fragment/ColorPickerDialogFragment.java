@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 
 import com.melodyxxx.puredaily.R;
 import com.melodyxxx.puredaily.adapter.ColorPickerAdapter;
@@ -58,7 +57,7 @@ public class ColorPickerDialogFragment extends DialogFragment {
         return new int[]{
                 res.getColor(R.color.material_blue),
                 res.getColor(R.color.material_light_blue),
-                res.getColor(R.color.material_pink),
+                res.getColor(R.color.pink),
                 res.getColor(R.color.material_red),
                 res.getColor(R.color.material_purple),
                 res.getColor(R.color.material_deep_purple),

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 /**
  * 数据解析
- * <p>
+ * <p/>
  * Created by hanjie on 2016/5/31.
  */
 public class ParserUtils {
@@ -40,9 +40,11 @@ public class ParserUtils {
             if (latestJObj.has("multipic")) {
                 latest.setMultipic(latestJObj.getBoolean("multipic"));
             }
-            imagesJArray = latestJObj.getJSONArray("images");
-            if (imagesJArray.length() != 0) {
-                latest.setImageUrl(imagesJArray.getString(0));
+            if (latestJObj.has("images")) {
+                imagesJArray = latestJObj.getJSONArray("images");
+                if (imagesJArray.length() != 0) {
+                    latest.setImageUrl(imagesJArray.getString(0));
+                }
             }
             stories.add(latest);
         }
@@ -60,7 +62,9 @@ public class ParserUtils {
         LatestDetails latestDetails = new LatestDetails();
         JSONObject resultJObj = new JSONObject(result);
         latestDetails.setBody(resultJObj.getString("body"));
-        latestDetails.setImageSource(resultJObj.getString("image_source"));
+        if (resultJObj.has("image_source")) {
+            latestDetails.setImageSource(resultJObj.getString("image_source"));
+        }
         latestDetails.setTitle(resultJObj.getString("title"));
         latestDetails.setImageUrl(resultJObj.getString("image"));
         JSONArray smallImagesJArray = resultJObj.getJSONArray("images");

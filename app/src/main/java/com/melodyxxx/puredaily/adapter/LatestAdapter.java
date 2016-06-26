@@ -2,6 +2,7 @@ package com.melodyxxx.puredaily.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 
 /**
  * 最新消息适配器
- * <p>
+ * <p/>
  * Created by hanjie on 2016/5/31.
  */
 public class LatestAdapter extends BaseAdapter<LatestAdapter.MyViewHolder> {
@@ -40,11 +41,15 @@ public class LatestAdapter extends BaseAdapter<LatestAdapter.MyViewHolder> {
         String imageUrl = latest.getImageUrl();
         String title = latest.getTitle();
         if (!PrefUtils.getBoolean(mContext, PrefConstants.MODE_NO_PIC, false)) {
-            Glide.with(mContext)
-                    .load(imageUrl)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .crossFade()
-                    .into(holder.image);
+            if (!TextUtils.isEmpty(imageUrl)) {
+                Glide.with(mContext)
+                        .load(imageUrl)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .crossFade()
+                        .into(holder.image);
+            } else {
+                holder.image.setImageDrawable(null);
+            }
             holder.image.setVisibility(View.VISIBLE);
         } else {
             holder.image.setVisibility(View.GONE);

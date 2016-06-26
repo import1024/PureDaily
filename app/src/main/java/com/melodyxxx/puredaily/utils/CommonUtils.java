@@ -20,7 +20,7 @@ import java.util.Date;
 
 /**
  * CommonUtils
- * <p>
+ * <p/>
  * Created by hanjie on 2016/6/2.
  */
 public class CommonUtils {
@@ -43,7 +43,7 @@ public class CommonUtils {
                 style = R.style.AppTheme_Blue;
                 break;
             case 1:
-                style = R.style.AppTheme_Light_Blue;
+                style = R.style.AppTheme_LightBlue;
                 break;
             case 2:
                 style = R.style.AppTheme_Pink;
@@ -55,13 +55,13 @@ public class CommonUtils {
                 style = R.style.AppTheme_Purple;
                 break;
             case 5:
-                style = R.style.AppTheme_Deep_Purple;
+                style = R.style.AppTheme_DeepPurple;
                 break;
             case 6:
                 style = R.style.AppTheme_Teal;
                 break;
             case 7:
-                style = R.style.AppTheme_Deep_Orange;
+                style = R.style.AppTheme_DeepOrange;
                 break;
             case 8:
                 style = R.style.AppTheme_Green;
@@ -79,7 +79,7 @@ public class CommonUtils {
                 style = R.style.AppTheme_Brown;
                 break;
             case 13:
-                style = R.style.AppTheme_Blue_Gray;
+                style = R.style.AppTheme_BlueGray;
                 break;
             case 14:
                 style = R.style.AppTheme_Amber;

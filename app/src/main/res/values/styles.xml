@@ -1,95 +1,96 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="Base.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:listDivider">@drawable/list_divider</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.Blue" parent="Base.AppTheme">
+    <style name="AppTheme.Blue">
         <item name="colorPrimary">@color/material_blue</item>
         <item name="colorPrimaryDark">@color/material_blue</item>
         <item name="colorAccent">@color/material_blue</item>
     </style>
 
-    <style name="AppTheme.Light.Blue" parent="Base.AppTheme">
+    <style name="AppTheme.LightBlue">
         <item name="colorPrimary">@color/material_light_blue</item>
         <item name="colorPrimaryDark">@color/material_light_blue</item>
         <item name="colorAccent">@color/material_light_blue</item>
     </style>
 
-    <style name="AppTheme.Pink" parent="Base.AppTheme">
-        <item name="colorPrimary">@color/material_pink</item>
-        <item name="colorPrimaryDark">@color/material_pink</item>
-        <item name="colorAccent">@color/material_pink</item>
+    <style name="AppTheme.Pink">
+        <item name="colorPrimary">@color/pink</item>
+        <item name="colorPrimaryDark">@color/pink</item>
+        <item name="colorAccent">@color/pink</item>
     </style>
 
-    <style name="AppTheme.Red" parent="Base.AppTheme">
+    <style name="AppTheme.Red">
         <item name="colorPrimary">@color/material_red</item>
         <item name="colorPrimaryDark">@color/material_red</item>
         <item name="colorAccent">@color/material_red</item>
     </style>
 
-    <style name="AppTheme.Purple" parent="Base.AppTheme">
+    <style name="AppTheme.Purple">
         <item name="colorPrimary">@color/material_purple</item>
         <item name="colorPrimaryDark">@color/material_purple</item>
         <item name="colorAccent">@color/material_purple</item>
     </style>
 
-    <style name="AppTheme.Deep.Purple" parent="Base.AppTheme">
+    <style name="AppTheme.DeepPurple">
         <item name="colorPrimary">@color/material_deep_purple</item>
         <item name="colorPrimaryDark">@color/material_deep_purple</item>
         <item name="colorAccent">@color/material_deep_purple</item>
     </style>
 
-    <style name="AppTheme.Teal" parent="Base.AppTheme">
+    <style name="AppTheme.Teal">
         <item name="colorPrimary">@color/material_teal</item>
         <item name="colorPrimaryDark">@color/material_teal</item>
         <item name="colorAccent">@color/material_teal</item>
     </style>
 
-    <style name="AppTheme.Deep.Orange" parent="Base.AppTheme">
+    <style name="AppTheme.DeepOrange">
         <item name="colorPrimary">@color/material_deep_orange</item>
         <item name="colorPrimaryDark">@color/material_deep_orange</item>
         <item name="colorAccent">@color/material_deep_orange</item>
     </style>
 
-    <style name="AppTheme.Green" parent="Base.AppTheme">
+    <style name="AppTheme.Green">
         <item name="colorPrimary">@color/material_green</item>
         <item name="colorPrimaryDark">@color/material_green</item>
         <item name="colorAccent">@color/material_green</item>
     </style>
 
-    <style name="AppTheme.Cyan" parent="Base.AppTheme">
+    <style name="AppTheme.Cyan">
         <item name="colorPrimary">@color/material_cyan</item>
         <item name="colorPrimaryDark">@color/material_cyan</item>
         <item name="colorAccent">@color/material_cyan</item>
     </style>
 
-    <style name="AppTheme.Orange" parent="Base.AppTheme">
+    <style name="AppTheme.Orange">
         <item name="colorPrimary">@color/material_orange</item>
         <item name="colorPrimaryDark">@color/material_orange</item>
         <item name="colorAccent">@color/material_orange</item>
     </style>
 
-    <style name="AppTheme.Indigo" parent="Base.AppTheme">
+    <style name="AppTheme.Indigo">
         <item name="colorPrimary">@color/material_indigo</item>
         <item name="colorPrimaryDark">@color/material_indigo</item>
         <item name="colorAccent">@color/material_indigo</item>
     </style>
 
-    <style name="AppTheme.Brown" parent="Base.AppTheme">
+    <style name="AppTheme.Brown">
         <item name="colorPrimary">@color/material_brown</item>
         <item name="colorPrimaryDark">@color/material_brown</item>
         <item name="colorAccent">@color/material_brown</item>
     </style>
 
-    <style name="AppTheme.Blue.Gray" parent="Base.AppTheme">
+    <style name="AppTheme.BlueGray">
         <item name="colorPrimary">@color/material_blue_gray</item>
         <item name="colorPrimaryDark">@color/material_blue_gray</item>
         <item name="colorAccent">@color/material_blue_gray</item>
     </style>
 
-    <style name="AppTheme.Amber" parent="Base.AppTheme">
+    <style name="AppTheme.Amber">
         <item name="colorPrimary">@color/material_amber</item>
         <item name="colorPrimaryDark">@color/material_amber</item>
         <item name="colorAccent">@color/material_amber</item>
@@ -108,8 +109,8 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

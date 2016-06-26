@@ -3,6 +3,7 @@ package com.melodyxxx.puredaily.utils;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.TextView;
 
 public class SnackBarUtils {
 
@@ -36,13 +37,13 @@ public class SnackBarUtils {
     }
 
 
-//    public static void customSnackBar(Snackbar snackbar, int backgroundColor, int textColor, int actionTextColor) {
-//        View view = snackbar.getView();
-//        view.setBackgroundColor(backgroundColor);
-//        ((TextView) view.findViewById(android.support.design.R.id.snackbar_text)).setTextColor(textColor);
-//        if (actionTextColor != 0) {
-//            ((TextView) view.findViewById(android.support.design.R.id.snackbar_action)).setTextColor(actionTextColor);
-//        }
-//    }
+    public static void customSnackBar(Snackbar snackbar, int backgroundColor, int textColor, int actionTextColor) {
+        View view = snackbar.getView();
+        view.setBackgroundColor(backgroundColor);
+        ((TextView) view.findViewById(android.support.design.R.id.snackbar_text)).setTextColor(textColor);
+        if (actionTextColor != 0) {
+            ((TextView) view.findViewById(android.support.design.R.id.snackbar_action)).setTextColor(actionTextColor);
+        }
+    }
 
 }
